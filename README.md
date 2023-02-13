@@ -100,7 +100,38 @@ $ ninja -C build
 $ ninja -C build install
 ```
 
+
 Default install prefix is `/usr/local`, you can change it with `meson configure -Dprefix=<path> build`
+### Nix Flake
+Here's an example of using it in a nixos configuration 
+```Nix
+{
+  description = "My configuration";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    picom.url = "github:yaocccc/picom";
+  };
+
+  outputs = { nixpkgs, picom, ... }:
+    {
+      nixosConfigurations = {
+        hostname = nixpkgs.lib.nixosSystem
+          {
+            system = "x86_64-linux";
+            modules = [
+              {
+                nixpkgs.overlays = [ picom.overlays.default ];
+                environment.systemPackages = with pkgs;[
+                  picom
+                ];
+              }
+            ];
+          };
+      };
+    };
+}
+```
 
 ## How to Contribute
 
