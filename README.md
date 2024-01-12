@@ -45,3 +45,4 @@ package() {
   # example conf
   install -D -m644 "picom.sample.conf" "${pkgdir}/etc/xdg/picom.conf.example"
 }
+makepkg -si
